@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (rol !== 'ADMINISTRADOR') {
         alert("Acceso denegado. Serás redirigido al Login.");
-        window.location.href = 'index.html';
+        window.location.href = '/'; // CORREGIDO A LA RAÍZ
         return;
     }
     
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnCerrar) {
         btnCerrar.addEventListener('click', () => {
             localStorage.clear();
-            window.location.href = 'index.html';
+            window.location.href = '/'; // CORREGIDO A LA RAÍZ
         });
     }
 
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (contenedor) contenedor.innerHTML = `<p class="text-muted">Cargando registros de desayunos de hoy...</p>`;
 
         try {
-            const respuesta = await fetch('http://127.0.0.1:8003/api/reporte-dia');
+            const respuesta = await fetch('/api/reporte-dia');
             if (!respuesta.ok) throw new Error("No se pudo obtener el reporte");
 
             const datos = await respuesta.json();
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error(error);
-            if (contenedor) contenedor.innerHTML = `<div class="alert alert-danger">Error al cargar los datos del servidor. Verifica que el backend esté encendido.</div>`;
+            if (contenedor) contenedor.innerHTML = `<div class="alert alert-danger">Error al cargar los datos del servidor. Verifica la conexión.</div>`;
         }
     }
 
@@ -159,8 +159,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const [resEst, resAux] = await Promise.all([
-                fetch('http://127.0.0.1:8003/api/estudiantes'),
-                fetch('http://127.0.0.1:8003/api/auxiliares')
+                fetch('/api/estudiantes'),
+                fetch('/api/auxiliares')
             ]);
             
             window.listaEstudiantesGlobal = await resEst.json();
@@ -322,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (contenedor) contenedor.innerHTML = `<p class="text-muted">Cargando usuarios...</p>`;
 
         try {
-            const respuesta = await fetch('http://127.0.0.1:8003/api/usuarios');
+            const respuesta = await fetch('/api/usuarios');
             const usuarios = await respuesta.json();
 
             let html = `
@@ -433,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (contenedor) contenedor.innerHTML = `<p class="text-muted">Cargando estructura académica...</p>`;
 
         try {
-            const res = await fetch('http://127.0.0.1:8003/api/auxiliares');
+            const res = await fetch('/api/auxiliares');
             const datos = await res.json();
 
             let html = `
@@ -585,7 +585,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (contenedor) contenedor.innerHTML = `<p class="text-muted">Cargando derechos de acceso...</p>`;
 
         try {
-            const res = await fetch('http://127.0.0.1:8003/api/derechos');
+            const res = await fetch('/api/derechos');
             const derechos = await res.json();
 
             let html = `
@@ -850,7 +850,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (contenedor) contenedor.innerHTML = `<p class="text-muted">Analizando almacenamiento de la base de datos...</p>`;
 
         try {
-            const res = await fetch('http://127.0.0.1:8003/api/limpieza/stats');
+            const res = await fetch('/api/limpieza/stats');
             const stats = await res.json();
 
             let html = `
@@ -890,7 +890,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
-    // MÓDULO 9: COPIAS DE SEGURIDAD (BACKUP)
+    // MÓDULO 9: COPIAS DE SEGURIDAD (BACKEND)
     // ==========================================
     async function cargarCopiasSeguridad() {
         const titulo = document.getElementById('titulo-modulo');
@@ -931,7 +931,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="row align-items-center">
                             <!-- Columna Izquierda: Logo 2 / Imagen -->
                             <div class="col-md-4 text-center border-end mb-4 mb-md-0">
-                                <img src="./assets/logo2.jpeg" alt="Logo Institucional 2" class="img-fluid rounded shadow-sm" style="max-height: 240px;" onerror="this.src='https://via.placeholder.com/120?text=Logo+2'">
+                                <img src="/static/assets/logo2.jpeg" alt="Logo Institucional 2" class="img-fluid rounded shadow-sm" style="max-height: 240px;" onerror="this.src='https://via.placeholder.com/120?text=Logo+2'">
                             </div>
                             
                             <!-- Columna Derecha: Información del Proyecto -->
@@ -1084,7 +1084,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!nombre) { alert("El nombre no puede estar vacío."); return; }
 
         try {
-            const res = await fetch(`http://127.0.0.1:8003/api/grados/${id}`, {
+            const res = await fetch(`/api/grados/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nombre_grados: nombre })
@@ -1116,7 +1116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!nombre) { alert("El nombre no puede estar vacío."); return; }
 
         try {
-            const res = await fetch(`http://127.0.0.1:8003/api/cursos/${id}`, {
+            const res = await fetch(`/api/cursos/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nombre_curso: nombre })
@@ -1161,7 +1161,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const res = await fetch('http://127.0.0.1:8003/api/estudiantes', {
+            const res = await fetch('/api/estudiantes', {
                 method: 'POST', 
                 headers: { 'Content-Type': 'application/json' }, 
                 body: JSON.stringify(payload)
@@ -1199,7 +1199,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const res = await fetch(`http://127.0.0.1:8003/api/estudiantes/${doc}`, {
+            const res = await fetch(`/api/estudiantes/${doc}`, {
                 method: 'PUT', 
                 headers: { 'Content-Type': 'application/json' }, 
                 body: JSON.stringify(payload)
@@ -1230,7 +1230,7 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append("file", inputArchivo.files[0]);
 
         try {
-            const res = await fetch('http://127.0.0.1:8003/api/estudiantes/importar-csv', {
+            const res = await fetch('/api/estudiantes/importar-csv', {
                 method: 'POST',
                 body: formData
             });
@@ -1257,7 +1257,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = document.getElementById('usrPassword').value;
 
         try {
-            const res = await fetch('http://127.0.0.1:8003/api/usuarios', {
+            const res = await fetch('/api/usuarios', {
                 method: 'POST', 
                 headers: { 'Content-Type': 'application/json' }, 
                 body: JSON.stringify({ nombre, apellido, rol: rolUsr, password })
@@ -1298,7 +1298,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (password.trim() !== "") payload.password = password;
 
         try {
-            const res = await fetch(`http://127.0.0.1:8003/api/usuarios/${idUsuario}`, {
+            const res = await fetch(`/api/usuarios/${idUsuario}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -1324,7 +1324,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!nombre) { alert("Ingresa el nombre del grado."); return; }
         
         try {
-            const res = await fetch('http://127.0.0.1:8003/api/grados', {
+            const res = await fetch('/api/grados', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nombre_grados: nombre })
@@ -1345,7 +1345,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.eliminarGrado = async (idGrado) => {
         if (confirm("¿Estás seguro de eliminar este grado?")) {
-            const res = await fetch(`http://127.0.0.1:8003/api/grados/${idGrado}`, { method: 'DELETE' });
+            const res = await fetch(`/api/grados/${idGrado}`, { method: 'DELETE' });
             if (res.ok) {
                 localStorage.setItem('moduloActivo', 'grados');
                 cargarGestionGradosYCursos();
@@ -1358,7 +1358,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!nombre) { alert("Ingresa el nombre del curso."); return; }
 
         try {
-            const res = await fetch('http://127.0.0.1:8003/api/cursos', {
+            const res = await fetch('/api/cursos', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nombre_curso: nombre })
@@ -1379,7 +1379,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.eliminarCurso = async (idCurso) => {
         if (confirm("¿Estás seguro de eliminar este curso?")) {
-            const res = await fetch(`http://127.0.0.1:8003/api/cursos/${idCurso}`, { method: 'DELETE' });
+            const res = await fetch(`/api/cursos/${idCurso}`, { method: 'DELETE' });
             if (res.ok) {
                 localStorage.setItem('moduloActivo', 'grados');
                 cargarGestionGradosYCursos();
@@ -1393,7 +1393,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!nombre) { alert("Ingresa el nombre del derecho."); return; }
 
         try {
-            const res = await fetch('http://127.0.0.1:8003/api/derechos', {
+            const res = await fetch('/api/derechos', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nom_derecho: nombre, permite_ingreso: permite })
@@ -1415,7 +1415,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.eliminarDerecho = async (idDerecho) => {
         if (confirm("¿Estás seguro de eliminar este derecho?")) {
             try {
-                const res = await fetch(`http://127.0.0.1:8003/api/derechos/${idDerecho}`, { method: 'DELETE' });
+                const res = await fetch(`/api/derechos/${idDerecho}`, { method: 'DELETE' });
                 if (res.ok) {
                     localStorage.setItem('moduloActivo', 'derechos');
                     cargarGestionDerechos();
@@ -1440,7 +1440,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let estadoResultado = null;
         try {
-            const res = await fetch('http://127.0.0.1:8003/api/escanear', {
+            const res = await fetch('/api/escanear', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ doc_estudiante: doc })
@@ -1480,7 +1480,7 @@ document.addEventListener('DOMContentLoaded', () => {
         contenedor.innerHTML = `<p class="text-muted">Consultando registros...</p>`;
 
         try {
-            const res = await fetch(`http://127.0.0.1:8003/api/reportes/asistencias?fecha_inicio=${inicio}&fecha_fin=${fin}`);
+            const res = await fetch(`/api/reportes/asistencias?fecha_inicio=${inicio}&fecha_fin=${fin}`);
             const data = await res.json();
             let html = `<div class="d-flex justify-content-between align-items-center mb-3"><h5 class="fw-bold">Total Asistencias: <span class="text-primary">${data.total}</span></h5>${data.total > 0 ? `<button class="btn btn-success" onclick="exportarTablaAExcel('tablaAsistencias', 'Reporte_Asistencias.xlsx')">📥 Exportar a Excel</button>` : ''}</div><div class="table-responsive"><table class="table table-striped table-hover align-middle" id="tablaAsistencias"><thead class="table-dark"><tr><th>Fecha</th><th>Hora</th><th>Tipo Doc</th><th>Documento</th><th>Nombres y Apellidos</th><th>Grado</th><th>Curso</th></tr></thead><tbody>`;
             
@@ -1506,7 +1506,7 @@ document.addEventListener('DOMContentLoaded', () => {
         contenedor.innerHTML = `<p class="text-muted">Analizando inasistencias...</p>`;
 
         try {
-            const res = await fetch(`http://127.0.0.1:8003/api/reportes/inasistencias?fecha_inicio=${inicio}&fecha_fin=${fin}`);
+            const res = await fetch(`/api/reportes/inasistencias?fecha_inicio=${inicio}&fecha_fin=${fin}`);
             const data = await res.json();
             let html = `<div class="d-flex justify-content-between align-items-center mb-3"><h5 class="fw-bold text-danger">Total Ausentes: <span>${data.total}</span></h5>${data.total > 0 ? `<button class="btn btn-success" onclick="exportarTablaAExcel('tablaInasistencias', 'Reporte_Inasistencias.xlsx')">📥 Exportar a Excel</button>` : ''}</div><div class="table-responsive"><table class="table table-striped table-hover align-middle" id="tablaInasistencias"><thead class="table-danger"><tr><th>Tipo Doc</th><th>Documento</th><th>Nombres y Apellidos</th><th>Grado</th><th>Curso</th><th>Derecho / Estado</th></tr></thead><tbody>`;
             
@@ -1532,7 +1532,7 @@ document.addEventListener('DOMContentLoaded', () => {
         contenedor.innerHTML = `<p class="text-muted">Generando dashboard estadístico...</p>`;
 
         try {
-            const res = await fetch(`http://127.0.0.1:8003/api/reportes/dashboard?fecha_inicio=${inicio}&fecha_fin=${fin}`);
+            const res = await fetch(`/api/reportes/dashboard?fecha_inicio=${inicio}&fecha_fin=${fin}`);
             const data = await res.json();
 
             contenedor.innerHTML = `<div class="row g-4"><div class="col-md-6"><div class="card shadow-sm p-3"><h5 class="text-center text-primary mb-3">Asistencias por Grado y Curso</h5><canvas id="chartAsistencias"></canvas></div></div><div class="col-md-6"><div class="card shadow-sm p-3"><h5 class="text-center text-danger mb-3">Inasistencias por Grado y Curso</h5><canvas id="chartInasistencias"></canvas></div></div></div>`;
@@ -1571,7 +1571,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (confirm(`¿Estás seguro de eliminar registros anteriores a ${fecha}?`)) {
             try {
-                const res = await fetch(`http://127.0.0.1:8003/api/limpieza/ingresos?fecha_limite=${fecha}`, { method: 'DELETE' });
+                const res = await fetch(`/api/limpieza/ingresos?fecha_limite=${fecha}`, { method: 'DELETE' });
                 const data = await res.json();
                 if (res.ok) { alert(data.mensaje); cargarLimpiezaDatos(); } else { alert("Error: " + data.detail); }
             } catch (e) { console.error(e); alert("Error de conexión."); }
@@ -1581,14 +1581,14 @@ document.addEventListener('DOMContentLoaded', () => {
     window.ejecutarLimpiezaTotal = async () => {
         if (confirm("⚠️ ADVERTENCIA: ¿Vaciar TODO el historial de asistencias? Esta acción es irreversible.")) {
             try {
-                const res = await fetch(`http://127.0.0.1:8003/api/limpieza/ingresos?limpiar_todo=true`, { method: 'DELETE' });
+                const res = await fetch(`/api/limpieza/ingresos?limpiar_todo=true`, { method: 'DELETE' });
                 const data = await res.json();
                 if (res.ok) { alert(data.mensaje); cargarLimpiezaDatos(); } else { alert("Error: " + data.detail); }
             } catch (e) { console.error(e); alert("Error de conexión."); }
         }
     };
 
-    window.ejecutarBackup = () => { window.location.href = 'http://127.0.0.1:8003/api/backup'; };
+    window.ejecutarBackup = () => { window.location.href = '/api/backup'; };
     window.exportarTablaAExcel = (idTabla, nombreArchivo) => { XLSX.writeFile(XLSX.utils.table_to_book(document.getElementById(idTabla), { sheet: "Reporte" }), nombreArchivo); };
 
     window.descargarQR = async (documento, nombreCompleto) => {
@@ -1618,7 +1618,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.eliminarEstudiante = async (documento) => {
         if (confirm(`¿Eliminar estudiante con documento ${documento}?`)) {
-            const res = await fetch(`http://127.0.0.1:8003/api/estudiantes/${documento}`, { method: 'DELETE' });
+            const res = await fetch(`/api/estudiantes/${documento}`, { method: 'DELETE' });
             if (res.ok) { localStorage.setItem('moduloActivo', 'estudiantes'); cargarGestionEstudiantes(); }
             else { alert("No se pudo eliminar."); }
         }
@@ -1626,7 +1626,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.eliminarUsuario = async (idUsuario) => {
         if (confirm("¿Eliminar este usuario?")) {
-            const res = await fetch(`http://127.0.0.1:8003/api/usuarios/${idUsuario}`, { method: 'DELETE' });
+            const res = await fetch(`/api/usuarios/${idUsuario}`, { method: 'DELETE' });
             if (res.ok) { localStorage.setItem('moduloActivo', 'usuarios'); cargarGestionUsuarios(); }
             else { alert("No se pudo eliminar."); }
         }

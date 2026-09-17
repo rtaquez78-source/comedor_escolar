@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!rol) {
         alert("Acceso denegado. Serás redirigido al Login.");
-        window.location.href = 'index.html';
+        window.location.href = '/'; // Corregido a la raíz
         return;
     }
     const elNombreOp = document.getElementById('nombreOperador');
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnSalir) {
         btnSalir.addEventListener('click', () => {
             localStorage.clear();
-            window.location.href = 'index.html';
+            window.location.href = '/'; // Corregido a la raíz
         });
     }
 
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     async function sincronizarTablaDelDia() {
         try {
-            const respuesta = await fetch('http://127.0.0.1:8003/api/reporte-dia');
+            const respuesta = await fetch('/api/reporte-dia');
             if (!respuesta.ok) return;
 
             const datos = await respuesta.json();
@@ -96,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             let html = '';
-            // Mostramos los más recientes arriba
             const registrosInvertidos = [...datos.registros].reverse();
             registrosInvertidos.forEach(reg => {
                 html += `
@@ -114,7 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Cargar los registros de hoy al abrir la sesión
     sincronizarTablaDelDia();
 
     async function iniciarScannerOperador() {
@@ -148,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const zonaAlertas = document.getElementById('zonaAlertas');
 
                     try {
-                        const respuesta = await fetch('http://127.0.0.1:8003/api/escanear', {
+                        const respuesta = await fetch('/api/escanear', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ doc_estudiante: documento })
@@ -166,16 +164,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (estado === 'aprobado') {
                                 if (zonaAlertas) zonaAlertas.innerHTML = `<div class="alert alert-success text-center py-3 fs-4 fw-bold shadow-sm mb-0">✅ ACCESO APROBADO ${infoEstudiante}</div>`;
                                 reproducirSonido('aprobado');
-                                
-                                // Actualiza la tabla consultando de inmediato los registros de hoy
                                 await sincronizarTablaDelDia();
-                                
                                 tiempoPausa = 3000; 
                             } 
                             else if (estado === 'advertencia') {
                                 if (zonaAlertas) zonaAlertas.innerHTML = `<div class="alert alert-warning text-center py-3 fs-5 fw-bold shadow-sm mb-0">⚠️ ATENCIÓN: YA ATENDIDO HOY ${infoEstudiante}</div>`;
                                 reproducirSonido('advertencia');
-                                // Al ser repetido, el servidor no crea un ingreso nuevo, por lo que la lista no se altera
                             } 
                             else if (estado === 'denegado') {
                                 if (zonaAlertas) zonaAlertas.innerHTML = `<div class="alert alert-danger text-center py-3 fs-5 fw-bold shadow-sm mb-0">⛔ ACCESO DENEGADO<br>${resultado.mensaje}</div>`;

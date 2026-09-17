@@ -5,7 +5,7 @@ import os
 from datetime import datetime, timezone, timedelta
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from passlib.context import CryptContext
@@ -99,6 +99,10 @@ def ruta_raiz():
 @app.get("/login")
 def ruta_login():
     return ruta_raiz()
+
+@app.get("/index.html")
+def redirigir_index():
+    return RedirectResponse(url="/", status_code=303)
 
 @app.get("/admin.html")
 def ruta_admin():
