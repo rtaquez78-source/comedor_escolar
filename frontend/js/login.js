@@ -6,8 +6,8 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     const mensajeError = document.getElementById('mensajeError');
 
     try {
-        // Hacemos la petición POST a nuestro servidor FastAPI
-        const respuesta = await fetch('http://127.0.0.1:8003/api/login', {
+        // CORREGIDO: Ruta relativa para que funcione desde cualquier equipo o celular en la nube
+        const respuesta = await fetch('/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -22,11 +22,11 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
             localStorage.setItem('usuarioRol', datos.rol);
             localStorage.setItem('usuarioNombre', datos.nombre);
             
-            // Redirección condicionada por el rol
+            // Redirección condicionada por el rol con ruta absoluta del servidor
             if (datos.rol === 'ADMINISTRADOR') {
-                window.location.href = 'admin.html';
+                window.location.href = '/admin.html';
             } else {
-                window.location.href = 'operador.html';
+                window.location.href = '/operador.html';
             }
         } else {
             // Si hay error (401 o 404), mostramos la alerta
@@ -34,6 +34,6 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         }
     } catch (error) {
         console.error("Error al conectar con el backend:", error);
-        alert("Error de conexión con el servidor. ¿Está encendido Uvicorn?");
+        alert("Error de conexión con el servidor.");
     }
 });
