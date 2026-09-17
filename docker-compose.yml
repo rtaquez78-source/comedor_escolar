@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    container_name: comedor_escolar_backend
+    ports:
+      - "8003:8003"
+    volumes:
+      - .:/app
+    restart: always
+    environment:
+      - PYTHONUNBUFFERED=1

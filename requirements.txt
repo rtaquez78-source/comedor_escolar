@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+pydantic
+passlib
+bcrypt==4.3.0
+python-multipart

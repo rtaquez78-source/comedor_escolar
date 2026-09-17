@@ -1,0 +1,23 @@
+:root {
+    --color-principal: #003366;
+}
+
+body {
+    background-color: #f8f9fa;
+}
+
+.bg-principal {
+    background-color: var(--color-principal) !important;
+    color: white;
+}
+
+.btn-principal {
+    background-color: var(--color-principal);
+    color: white;
+    border: none;
+}
+
+.btn-principal:hover {
+    background-color: #002244;
+    color: white;
+}

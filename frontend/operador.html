@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Punto de Servicio - Comedor Escolar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body class="bg-light">
+
+<!-- Barra Superior -->
+<nav class="navbar navbar-dark bg-principal shadow-sm">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <img src="./assets/logo.jpeg" alt="Logo" width="40" height="40" class="me-2 rounded-circle bg-white p-1" onerror="this.src='https://via.placeholder.com/40?text=Logo'">
+            <span class="fw-bold">Punto de Servicio - Cámara QR</span>
+        </a>
+        <div class="d-flex align-items-center text-white">
+            <span id="nombreOperador" class="me-3 fw-bold">Operador</span>
+            <button id="btn-cerrar-sesion" class="btn btn-sm btn-danger">Salir</button>
+        </div>
+    </div>
+</nav>
+
+<!-- Contenedor Principal Amplio (Ocupa el ancho marcado) -->
+<div class="container-fluid px-4 my-4">
+    <div class="row g-4 align-items-stretch">
+        
+        <!-- Columna Izquierda: Cámara y Alertas Grande -->
+        <div class="col-lg-6 col-md-12">
+            <div class="card shadow p-4 h-100 text-center">
+                <h4 class="mb-3 text-secondary fw-bold">📷 Enfoque el QR del Estudiante</h4>
+                
+                <!-- Visor de cámara ampliado -->
+                <div id="lector-qr" class="mx-auto border border-primary rounded shadow-sm" style="width: 100%; max-width: 520px;"></div>
+                
+                <!-- Zona de Alertas -->
+                <div id="zonaAlertas" class="mt-4 w-100" style="max-width: 520px; margin: 0 auto;">
+                    <div class="alert alert-secondary py-3 fs-5 fw-semibold mb-0">Cámara lista. Esperando código...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna Derecha: Tabla de Ingresos Recientes Amplia -->
+        <div class="col-lg-6 col-md-12">
+            <div class="card shadow p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-primary fw-bold mb-0">📋 Ingresos Recientes de Hoy</h4>
+                    <span id="contadorSesion" class="badge bg-primary fs-6">0 atendidos</span>
+                </div>
+                
+                <div class="table-responsive" style="max-height: 520px; overflow-y: auto;">
+                    <table class="table table-striped table-hover align-middle">
+                        <thead class="table-dark sticky-top">
+                            <tr>
+                                <th style="width: 15%;">Hora</th>
+                                <th style="width: 25%;">Documento</th>
+                                <th style="width: 35%;">Estudiante</th>
+                                <th style="width: 25%;">Grado/Curso</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaIngresosRecientes">
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-5">
+                                    <span class="fs-5">Aún no hay registros en esta sesión.</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Logo Inferior y Créditos -->
+    <div class="mt-4 text-center">
+        <img src="./assets/logo2.jpeg" alt="Logo Secundario" style="max-height: 55px;" class="mb-2" onerror="this.src='https://via.placeholder.com/120?text=Logo+2'">
+        <br>
+        <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#creditosModal">Créditos</button>
+    </div>
+</div>
+
+<!-- Modal de Créditos -->
+<div class="modal fade" id="creditosModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-principal text-white">
+                <h5 class="modal-title">Créditos del Sistema</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-start">
+                <p><strong>Proyecto:</strong> Comedor Escolar V1.2</p>
+                <p><strong>Año:</strong> 2026</p>
+                <p><strong>Autores:</strong> Jeimy Julieth Ruano Morales, Jessica Luciana Navarrete Rodriguez</p>
+                <p><strong>Técnico:</strong> Programación de software - LEMO</p>
+                <p><strong>Instructor:</strong> Ing. Rigo Wilfred Taquez</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script src="./js/operador.js"></script>
+</body>
+</html>

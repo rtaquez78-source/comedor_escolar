@@ -1,0 +1,43 @@
+Administrador: Usuario: rigo | Contraseña: admin123
+
+Operador: Usuario: María | Contraseña: admin123
+
+--
+
+cd ~/Documentos/comedor_escolar
+Paso 2: Arrancar el servidor con Docker
+
+sudo docker compose up
+Sabrás que está listo cuando veas el mensaje: Uvicorn running on [http://0.0.0.0:8003](http://0.0.0.0:8003))
+Nota: Si prefieres que la terminal quede libre y el servidor corra de fondo silenciosamente, puedes iniciarlo en segundo plano agregando la letra -d:
+Bash
+
+sudo docker compose up -d
+
+Paso 3: Abrir la interfaz (Frontend)
+
+    Abre tu editor de código (VS Code) o tu explorador de archivos.
+
+    Abre tu archivo admin.html (o usa Live Server si lo tienes configurado) para interactuar con el panel de administración, registrar estudiantes, ver el reporte del día y escanear códigos QR conectados al backend que ya está corriendo en el puerto 8003.
+
+¿Cómo apagar el servidor cuando termines de trabajar?
+
+    Si lo abriste normal (Paso 2): Solo ve a la terminal donde corre Docker y presiona las teclas Ctrl + C.
+
+    Si lo abriste en segundo plano (-d): Ejecuta el siguiente comando en la carpeta del proyecto para apagarlo limpiamente:
+    Bash
+
+    sudo docker compose down
+
+--
+
+127.0.0.1:5500
+
+sudo docker compose down
+
+encender 
+sudo docker compose up -d
+
+
+reiniciar el servidor 
+uvicorn main:app --reload
