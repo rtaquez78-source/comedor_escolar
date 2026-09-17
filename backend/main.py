@@ -85,12 +85,12 @@ class UsuarioUpdateRequest(BaseModel):
 # ==========================================
 @app.get("/")
 def ruta_raiz():
-    # Buscar el login probando en diferentes ubicaciones posibles en la nube
+    # Buscar el archivo index.html probando en diferentes ubicaciones posibles en la nube
     posibles_rutas = [
-        os.path.join(os.path.dirname(__file__), "../frontend/login.html"),
-        os.path.join(os.path.dirname(__file__), "frontend/login.html"),
-        "frontend/login.html",
-        "../frontend/login.html"
+        os.path.join(os.path.dirname(__file__), "../frontend/index.html"),
+        os.path.join(os.path.dirname(__file__), "frontend/index.html"),
+        "frontend/index.html",
+        "../frontend/index.html"
     ]
     
     for ruta in posibles_rutas:
