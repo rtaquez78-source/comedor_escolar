@@ -81,28 +81,54 @@ class UsuarioUpdateRequest(BaseModel):
     password: str | None = None
 
 # ==========================================
-# RUTAS / ENDPOINTS
+# RUTAS / ENDPOINTS DE PÁGINAS WEB
 # ==========================================
 @app.get("/")
 def ruta_raiz():
-    # Buscar el archivo index.html probando en diferentes ubicaciones posibles en la nube
     posibles_rutas = [
         os.path.join(os.path.dirname(__file__), "../frontend/index.html"),
         os.path.join(os.path.dirname(__file__), "frontend/index.html"),
         "frontend/index.html",
         "../frontend/index.html"
     ]
-    
     for ruta in posibles_rutas:
         if os.path.exists(ruta):
             return FileResponse(ruta)
-            
     return {"mensaje": "¡Servidor del Comedor Escolar en línea y Base de Datos conectada!"}
 
 @app.get("/login")
 def ruta_login():
     return ruta_raiz()
 
+@app.get("/admin.html")
+def ruta_admin():
+    posibles_rutas = [
+        os.path.join(os.path.dirname(__file__), "../frontend/admin.html"),
+        os.path.join(os.path.dirname(__file__), "frontend/admin.html"),
+        "frontend/admin.html",
+        "../frontend/admin.html"
+    ]
+    for ruta in posibles_rutas:
+        if os.path.exists(ruta):
+            return FileResponse(ruta)
+    raise HTTPException(status_code=404, detail="Página de administrador no encontrada")
+
+@app.get("/operador.html")
+def ruta_operador():
+    posibles_rutas = [
+        os.path.join(os.path.dirname(__file__), "../frontend/operador.html"),
+        os.path.join(os.path.dirname(__file__), "frontend/operador.html"),
+        "frontend/operador.html",
+        "../frontend/operador.html"
+    ]
+    for ruta in posibles_rutas:
+        if os.path.exists(ruta):
+            return FileResponse(ruta)
+    raise HTTPException(status_code=404, detail="Página de operador no encontrada")
+
+# ==========================================
+# ENDPOINTS DE API (BACKEND)
+# ==========================================
 @app.post("/api/login")
 def iniciar_sesion(datos: LoginRequest):
     conexion = obtener_conexion()
