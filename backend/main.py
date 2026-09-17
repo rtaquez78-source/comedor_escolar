@@ -6,11 +6,11 @@ from datetime import datetime, timezone, timedelta
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from passlib.context import CryptContext
 from backend.database import inicializar_bd, obtener_conexion
 from typing import List
-from fastapi import HTTPException
 
 app = FastAPI(title="API Comedor Escolar V1.2")
 
@@ -24,6 +24,14 @@ app.add_middleware(
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto", bcrypt__truncate_error=False)
 inicializar_bd()
+
+# ==========================================
+# CONFIGURACIÓN DE ARCHIVOS ESTÁTICOS (FRONTEND)
+# ==========================================
+frontend_path = os.path.join(os.path.dirname(__file__), "../frontend")
+if os.path.exists(frontend_path):
+    # Monta la carpeta frontend para servir estilos CSS, scripts JS e imágenes
+    app.mount("/static", StaticFiles(directory=frontend_path), name="static")
 
 # ==========================================
 # MODELOS DE DATOS (Pydantic)
@@ -78,6 +86,10 @@ class UsuarioUpdateRequest(BaseModel):
 # ==========================================
 @app.get("/")
 def ruta_raiz():
+    # Sirve directamente el archivo login.html como página principal en la nube
+    login_file = os.path.join(frontend_path, "login.html")
+    if os.path.exists(login_file):
+        return FileResponse(login_file)
     return {"mensaje": "¡Servidor del Comedor Escolar en línea y Base de Datos conectada!"}
 
 @app.post("/api/login")
@@ -406,7 +418,6 @@ def crear_usuario(datos: UsuarioCreateRequest):
     conexion = obtener_conexion()
     cursor = conexion.cursor()
     try:
-        # Truncado seguro por bytes (máximo 72 bytes para bcrypt)
         password_segura = datos.password.encode('utf-8')[:72].decode('utf-8', errors='ignore')
         password_hash = pwd_context.hash(password_segura)
         cursor.execute("INSERT INTO USUARIOS (nombre, apellido, rol, password_hash) VALUES (?, ?, ?, ?)", 
@@ -424,7 +435,6 @@ def actualizar_usuario(id_usuario: int, datos: UsuarioUpdateRequest):
     cursor = conexion.cursor()
     try:
         if datos.password and datos.password.strip():
-            # Truncado seguro por bytes (máximo 72 bytes para bcrypt)
             password_segura = datos.password.encode('utf-8')[:72].decode('utf-8', errors='ignore')
             password_hash = pwd_context.hash(password_segura)
             cursor.execute("UPDATE USUARIOS SET nombre = ?, apellido = ?, rol = ?, password_hash = ? WHERE id_usuario = ?", 
@@ -595,7 +605,6 @@ def descargar_copia_seguridad():
     if not db_path or not os.path.exists(db_path):
         raise HTTPException(status_code=404, detail="Archivo de base de datos no encontrado en el servidor.")
     
-    # Ajuste opcional de zona horaria para el nombre del backup
     colombia_tz = timezone(timedelta(hours=-5))
     nombre_archivo = f"backup_comedor_{datetime.now(colombia_tz).strftime('%Y-%m-%d_%H-%M-%S')}.db"
     return FileResponse(path=db_path, filename=nombre_archivo, media_type="application/octet-stream")
