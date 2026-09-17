@@ -30,7 +30,6 @@ inicializar_bd()
 # ==========================================
 frontend_path = os.path.join(os.path.dirname(__file__), "../frontend")
 if os.path.exists(frontend_path):
-    # Monta la carpeta frontend para servir estilos CSS, scripts JS e imágenes
     app.mount("/static", StaticFiles(directory=frontend_path), name="static")
 
 # ==========================================
@@ -86,11 +85,23 @@ class UsuarioUpdateRequest(BaseModel):
 # ==========================================
 @app.get("/")
 def ruta_raiz():
-    # Sirve directamente el archivo login.html como página principal en la nube
-    login_file = os.path.join(frontend_path, "login.html")
-    if os.path.exists(login_file):
-        return FileResponse(login_file)
+    # Buscar el login probando en diferentes ubicaciones posibles en la nube
+    posibles_rutas = [
+        os.path.join(os.path.dirname(__file__), "../frontend/login.html"),
+        os.path.join(os.path.dirname(__file__), "frontend/login.html"),
+        "frontend/login.html",
+        "../frontend/login.html"
+    ]
+    
+    for ruta in posibles_rutas:
+        if os.path.exists(ruta):
+            return FileResponse(ruta)
+            
     return {"mensaje": "¡Servidor del Comedor Escolar en línea y Base de Datos conectada!"}
+
+@app.get("/login")
+def ruta_login():
+    return ruta_raiz()
 
 @app.post("/api/login")
 def iniciar_sesion(datos: LoginRequest):
@@ -103,7 +114,6 @@ def iniciar_sesion(datos: LoginRequest):
     if not usuario:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
         
-    # CORRECCIÓN: Truncado seguro por bytes (máximo 72 bytes para bcrypt)
     password_segura = datos.password.encode('utf-8')[:72].decode('utf-8', errors='ignore')
     if not pwd_context.verify(password_segura, usuario["password_hash"]):
         raise HTTPException(status_code=401, detail="Contraseña incorrecta")
@@ -121,7 +131,6 @@ def escanear_qr(datos: EscaneoRequest):
     conexion = obtener_conexion()
     cursor = conexion.cursor()
     
-    # Ajuste de zona horaria de Colombia (UTC-5)
     colombia_tz = timezone(timedelta(hours=-5))
     ahora_col = datetime.now(colombia_tz)
     hoy = ahora_col.strftime("%Y-%m-%d")
@@ -181,7 +190,6 @@ def obtener_reporte_dia():
     conexion = obtener_conexion()
     cursor = conexion.cursor()
     
-    # Ajuste de zona horaria de Colombia (UTC-5)
     colombia_tz = timezone(timedelta(hours=-5))
     hoy = datetime.now(colombia_tz).strftime("%Y-%m-%d")
     
